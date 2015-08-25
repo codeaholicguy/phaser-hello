@@ -79,7 +79,7 @@
 
         createGround: function () {
             // Here we create the ground.
-            var ground = this.platforms.create(0, this.game.world.height - 64, 'ground');
+            var ground = this.platforms.create(0, this.game.world.height - Configuration.WORLD.GROUND.HEIGHT, 'ground');
 
             //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
             ground.scale.setTo(2, 2);
@@ -106,7 +106,7 @@
             //  Here we'll create 12 of them evenly spaced apart
             var star;
             var starNumber = Configuration.STAR.NUMBER;
-            var width = 640 / starNumber;
+            var width = Configuration.GAME.WIDTH / starNumber;
             for (var i = 0; i < starNumber; i++) {
                 //  Create a star inside of the 'stars' group
                 star = this.stars.create(i * width, 0, 'star');

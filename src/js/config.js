@@ -3,8 +3,15 @@
  */
 
 var Configuration = {
+    GAME: {
+        WIDTH: 640,
+        HEIGHT: 480
+    },
     WORLD: {
         GRAVITY: 10,
+        GROUND: {
+            HEIGHT: 32
+        }
     },
     STAR: {
         NUMBER: 22,
