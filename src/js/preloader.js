@@ -45,6 +45,6 @@
         }
     };
 
-    window['phaser-hello'] = window['phaser-hello'] || {};
-    window['phaser-hello'].Preloader = Preloader;
+    window['halla'] = window['halla'] || {};
+    window['halla'].Preloader = Preloader;
 }());

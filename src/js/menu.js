@@ -58,6 +58,6 @@
         }
     };
 
-    window['phaser-hello'] = window['phaser-hello'] || {};
-    window['phaser-hello'].Menu = Menu;
+    window['halla'] = window['halla'] || {};
+    window['halla'].Menu = Menu;
 }());

@@ -29,7 +29,7 @@
         }
     };
 
-    window['phaser-hello'] = window['phaser-hello'] || {};
-    window['phaser-hello'].Boot = Boot;
+    window['halla'] = window['halla'] || {};
+    window['halla'].Boot = Boot;
 }());
 

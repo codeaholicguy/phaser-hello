@@ -1,8 +1,8 @@
 window.addEventListener('load', function () {
     'use strict';
 
-    var ns = window['phaser-hello'];
-    var game = new Phaser.Game(Configuration.GAME.WIDTH, Configuration.GAME.HEIGHT, Phaser.AUTO, 'phaser-hello-game');
+    var ns = window['halla'];
+    var game = new Phaser.Game(Configuration.GAME.WIDTH, Configuration.GAME.HEIGHT, Phaser.AUTO, 'halla-game');
     game.state.add('boot', ns.Boot);
     game.state.add('preloader', ns.Preloader);
     game.state.add('menu', ns.Menu);

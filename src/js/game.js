@@ -225,6 +225,6 @@
         }
     };
 
-    window['phaser-hello'] = window['phaser-hello'] || {};
-    window['phaser-hello'].Game = Game;
+    window['halla'] = window['halla'] || {};
+    window['halla'].Game = Game;
 }());
