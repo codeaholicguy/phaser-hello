@@ -6,12 +6,18 @@
 
     Menu.prototype = {
         create: function () {
-            var text = this.add.text(this.game.width * 0.5, this.game.height * 0.5,
-                'MENU', {
-                    font: '42px Arial', fill: '#ffffff', align: 'center'
-                });
-            text.anchor.set(0.5);
-            this.input.onDown.add(this.onDown, this);
+            //  A simple background for our game
+            this.game.add.sprite(0, 0, 'sky-night');
+
+            // add our start button with a callback
+            this.titleDisplay = this.game.add.bitmapText(this.game.width/2, 250, 'flappyfont', 'PLAY', 30);
+            this.titleDisplay.anchor.setTo(0.5,0.5);
+
+            this.startButton = this.game.add.button(this.game.width/2, 300, 'start-button', this.startClick, this);
+            this.startButton.anchor.setTo(0.5,0.5);
+
+            this.shareButton = this.game.add.button(this.game.width/2 - 100, 300, 'fb-button', this.shareClick, this);
+            this.shareButton.anchor.setTo(0.5, 0.5);
         },
 
         update: function () {
@@ -19,7 +25,36 @@
         },
 
         onDown: function () {
+
+        },
+
+        startClick: function() {
+            // start button click handler
             this.game.state.start('game');
+        },
+
+        shareClick: function () {
+            if (typeof this.score === 'undefined') {
+                this.score = 0;
+            }
+
+            this.share('fb', this.score);
+        },
+
+        share: function (type) {
+            switch (type) {
+                case 'fb':
+                    var url = 'https://www.facebook.com/dialog/feed?' +
+                        'app_id=515415415302174' +
+                        '&display=popup' +
+                        '&caption=Wow, I achieve some diamonds on Halla. Try with me!' +
+                        '&link=http://codeaholicguy.github.io/halla/' +
+                        '&redirect_uri=https://facebook.com/';
+                    window.open(url, '_blank');
+                    break;
+                case 'tw':
+                    break;
+            }
         }
     };
 

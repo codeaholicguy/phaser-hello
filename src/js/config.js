@@ -14,7 +14,7 @@ var Configuration = {
         }
     },
     STAR: {
-        NUMBER: 22,
+        NUMBER: 10,
         WEIGHT: 2,
         BOUNCE: 0.7
     },
@@ -24,14 +24,25 @@ var Configuration = {
     },
     LEDGES: [
         {
-            x: 400,
-            y: 300,
+            x: 40,
+            y: 200,
+            width: 120,
+            height: 32,
             immovable: true
         },
         {
-            x: -150,
-            y: 200,
+            x: 300,
+            y: 300,
+            width: 100,
+            height: 32,
+            immovable: true
+        },
+        {
+            x: 480,
+            y: 80,
+            width: 100,
+            height: 32,
             immovable: true
         }
     ]
-}
+};

@@ -2,10 +2,6 @@
     'use strict';
 
     function Game() {
-        this.platforms = 'undefined';
-        this.player = 'undefined';
-        this.cursors = 'undefined';
-        this.stars = 'undefined';
     }
 
     Game.prototype = {
@@ -13,6 +9,7 @@
             this.input.onDown.add(this.onInputDown, this);
 
             this.createWorld();
+            this.createScore();
 
             //  Our controls.
             this.cursors = this.game.input.keyboard.createCursorKeys();
@@ -55,7 +52,7 @@
         },
 
         onInputDown: function () {
-            this.game.state.start('menu');
+
         },
 
         createWorld: function () {
@@ -63,7 +60,13 @@
             this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
             //  A simple background for our game
-            this.game.add.sprite(0, 0, 'sky');
+            //  Detect day or night
+            var hour = (new Date()).getHours();
+            if (hour >= 18) {
+                this.game.add.sprite(0, 0, 'sky-night');
+            } else {
+                this.game.add.sprite(0, 0, 'sky-day');
+            }
 
             //  The platforms group contains the ground and the 2 ledges we can jump on
             this.platforms = this.game.add.group();
@@ -81,9 +84,6 @@
             // Here we create the ground.
             var ground = this.platforms.create(0, this.game.world.height - Configuration.WORLD.GROUND.HEIGHT, 'ground');
 
-            //  Scale it to fit the width of the game (the original sprite is 400x32 in size)
-            ground.scale.setTo(2, 2);
-
             //  This stops it from falling away when you jump on it
             ground.body.immovable = true;
         },
@@ -92,30 +92,51 @@
             //  Now let's create ledges
             var ledges = Configuration.LEDGES;
             var ledge;
+            var x;
+            var y;
+            var width;
+            var height;
             for (var index = 0; index < ledges.length; index++) {
-                ledge = this.platforms.create(ledges[index].x, ledges[index].y, 'ground');
+                x = ledges[index].x;
+                y = ledges[index].y;
+                width = ledges[index].width;
+                height = ledges[index].height;
+                ledge = this.platforms.create(x, y, 'ground');
+                ledge.scale.set(width / Configuration.GAME.WIDTH, 1);
                 ledge.body.immovable = ledges[index].immovable;
             }
         },
 
         createStars: function () {
-            this.stars = this.game.add.group();
-
-            this.stars.enableBody = true;
+            if (typeof this.stars === 'undefined') {
+                this.stars = this.game.add.group();
+                this.stars.enableBody = true;
+                this.stars.count = 0;
+            }
 
             //  Here we'll create 12 of them evenly spaced apart
             var star;
             var starNumber = Configuration.STAR.NUMBER;
-            var width = Configuration.GAME.WIDTH / starNumber;
-            for (var i = 0; i < starNumber; i++) {
-                //  Create a star inside of the 'stars' group
-                star = this.stars.create(i * width, 0, 'star');
+            var width = Configuration.GAME.WIDTH - 20;
+            var groundHeight = Configuration.WORLD.GROUND.HEIGHT + 50;
+            var height = Configuration.GAME.HEIGHT - groundHeight;
+            var x;
+            var y;
+            if (this.stars.count === 0) {
+                while (this.stars.count < starNumber) {
+                    this.stars.count++;
+                    x = Math.round(Math.random() * (width - (width / starNumber))) + (width / starNumber);
+                    y = Math.round(Math.random() * height);
 
-                //  Let gravity do its thing
-                star.body.gravity.y = Configuration.STAR.WEIGHT * Configuration.WORLD.GRAVITY;
+                    //  Create a star inside of the 'stars' group
+                    star = this.stars.create(x, y, 'star');
 
-                //  This just gives each star a slightly random bounce value
-                star.body.bounce.y = Configuration.STAR.BOUNCE + Math.random() * 0.2;
+                    //  Let gravity do its thing
+                    star.body.gravity.y = Configuration.STAR.WEIGHT * Configuration.WORLD.GRAVITY;
+
+                    //  This just gives each star a slightly random bounce value
+                    star.body.bounce.y = Configuration.STAR.BOUNCE + Math.random() * 0.2;
+                }
             }
         },
 
@@ -132,13 +153,75 @@
             this.player.body.collideWorldBounds = true;
 
             //  Our two animations, walking left and right.
-            this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-            this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+            this.player.animations.add('left', [0, 1], 10, true);
+            this.player.animations.add('right', [2, 3], 10, true);
+        },
+
+        createScore: function () {
+            //  The score
+            this.scoreDisplay = this.game.add.bitmapText(20, 20, 'flappyfont', 'Score: 0', 24);
+
+
+            this.menuButton = this.game.add.button(this.game.width - 40, 20, 'start-button', this.menuClick, this);
+            this.menuButton.anchor.setTo(0.5, 0.5);
+            this.menuButton.scale.set(0.5, 0.5);
+
+            this.shareButton = this.game.add.button(this.game.width - 100, 20, 'fb-button', this.shareClick, this);
+            this.shareButton.anchor.setTo(0.5, 0.5);
+            this.shareButton.scale.set(0.5, 0.5);
+        },
+
+        updateScore: function () {
+            //  Add and update the score
+            if (typeof this.score === 'undefined') {
+                this.score = 0;
+            }
+
+            this.score++;
+            this.scoreDisplay.text = 'Score: ' + this.score;
         },
 
         collectStar: function (player, star) {
             // Removes the star from the screen
             star.kill();
+
+            this.updateScore();
+
+            this.stars.count--;
+            this.createStars();
+        },
+
+        menuClick: function () {
+            this.reset();
+            this.game.state.start('menu');
+        },
+
+        shareClick: function () {
+            if (typeof this.score === 'undefined') {
+                this.score = 0;
+            }
+
+            this.share('fb', this.score);
+        },
+
+        reset: function () {
+            this.stars = undefined;
+        },
+
+        share: function (type, score) {
+            switch (type) {
+                case 'fb':
+                    var url = 'https://www.facebook.com/dialog/feed?' +
+                        'app_id=515415415302174' +
+                        '&display=popup' +
+                        '&caption=Wow, I achieve ' + score + ' diamonds on Halla. Try with me!' +
+                        '&link=http://codeaholicguy.github.io/halla/' +
+                        '&redirect_uri=https://facebook.com/';
+                    window.open(url, '_blank');
+                    break;
+                case 'tw':
+                    break;
+            }
         }
     };
 
