@@ -160,7 +160,7 @@
         createScore: function () {
             //  The score
             this.scoreDisplay = this.game.add.bitmapText(20, 20, 'flappyfont', 'Score: 0', 24);
-
+            this.scoreDisplay.anchor.setTo(0, 0.5);
 
             this.menuButton = this.game.add.button(this.game.width - 40, 20, 'start-button', this.menuClick, this);
             this.menuButton.anchor.setTo(0.5, 0.5);
