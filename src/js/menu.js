@@ -10,13 +10,13 @@
             this.game.add.sprite(0, 0, 'sky-night');
 
             // add our start button with a callback
-            this.titleDisplay = this.game.add.bitmapText(this.game.width/2, 250, 'flappyfont', 'PLAY', 30);
-            this.titleDisplay.anchor.setTo(0.5,0.5);
+            this.titleDisplay = this.game.add.bitmapText(this.game.width / 2, 250, 'flappyfont', 'PLAY', 30);
+            this.titleDisplay.anchor.setTo(0.5, 0.5);
 
-            this.startButton = this.game.add.button(this.game.width/2, 300, 'start-button', this.startClick, this);
-            this.startButton.anchor.setTo(0.5,0.5);
+            this.startButton = this.game.add.button(this.game.width / 2, 300, 'start-button', this.startClick, this);
+            this.startButton.anchor.setTo(0.5, 0.5);
 
-            this.shareButton = this.game.add.button(this.game.width/2 - 100, 300, 'fb-button', this.shareClick, this);
+            this.shareButton = this.game.add.button(this.game.width / 2 - 100, 300, 'fb-button', this.shareClick, this);
             this.shareButton.anchor.setTo(0.5, 0.5);
         },
 
@@ -28,7 +28,7 @@
 
         },
 
-        startClick: function() {
+        startClick: function () {
             // start button click handler
             this.game.state.start('game');
         },
@@ -44,13 +44,6 @@
         share: function (type) {
             switch (type) {
                 case 'fb':
-                    var url = 'https://www.facebook.com/dialog/feed?' +
-                        'app_id=515415415302174' +
-                        '&display=popup' +
-                        '&caption=Wow, I achieve some diamonds on Halla. Try with me!' +
-                        '&link=http://codeaholicguy.github.io/halla/' +
-                        '&redirect_uri=https://facebook.com/';
-                    window.open(url, '_blank');
                     break;
                 case 'tw':
                     break;

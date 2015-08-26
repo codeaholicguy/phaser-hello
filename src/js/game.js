@@ -211,13 +211,6 @@
         share: function (type, score) {
             switch (type) {
                 case 'fb':
-                    var url = 'https://www.facebook.com/dialog/feed?' +
-                        'app_id=515415415302174' +
-                        '&display=popup' +
-                        '&caption=Wow, I achieve ' + score + ' diamonds on Halla. Try with me!' +
-                        '&link=http://codeaholicguy.github.io/halla/' +
-                        '&redirect_uri=https://facebook.com/';
-                    window.open(url, '_blank');
                     break;
                 case 'tw':
                     break;
